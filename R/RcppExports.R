@@ -5,7 +5,3 @@ detectImperfectIR_cpp <- function(enc1, enc2, minLen, maxLen, maxMismcNum, maxLo
     .Call('detectIR_detectImperfectIR_cpp', PACKAGE = 'detectIR', enc1, enc2, minLen, maxLen, maxMismcNum, maxLoopLen)
 }
 
-rcpp_hello_world <- function() {
-    .Call('detectIR_rcpp_hello_world', PACKAGE = 'detectIR')
-}
-
