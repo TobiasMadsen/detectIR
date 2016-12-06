@@ -21,3 +21,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// findAllowedPatches
+List findAllowedPatches(LogicalVector seq, int minLen);
+RcppExport SEXP detectIR_findAllowedPatches(SEXP seqSEXP, SEXP minLenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< LogicalVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< int >::type minLen(minLenSEXP);
+    rcpp_result_gen = Rcpp::wrap(findAllowedPatches(seq, minLen));
+    return rcpp_result_gen;
+END_RCPP
+}

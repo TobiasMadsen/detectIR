@@ -5,3 +5,7 @@ detectImperfectIR_cpp <- function(enc1, enc2, minLen, maxLen, maxMismcNum, maxLo
     .Call('detectIR_detectImperfectIR_cpp', PACKAGE = 'detectIR', enc1, enc2, minLen, maxLen, maxMismcNum, maxLoopLen)
 }
 
+findAllowedPatches <- function(seq, minLen) {
+    .Call('detectIR_findAllowedPatches', PACKAGE = 'detectIR', seq, minLen)
+}
+
