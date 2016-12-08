@@ -6,18 +6,31 @@
 using namespace Rcpp;
 
 // detectImperfectIR_cpp
-List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, int maxLen, int maxMismcNum, int maxLoopLen);
-RcppExport SEXP detectIR_detectImperfectIR_cpp(SEXP enc1SEXP, SEXP enc2SEXP, SEXP minLenSEXP, SEXP maxLenSEXP, SEXP maxMismcNumSEXP, SEXP maxLoopLenSEXP) {
+List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, int maxMismcNum);
+RcppExport SEXP detectIR_detectImperfectIR_cpp(SEXP enc1SEXP, SEXP enc2SEXP, SEXP minLenSEXP, SEXP maxMismcNumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< IntegerVector >::type enc1(enc1SEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type enc2(enc2SEXP);
     Rcpp::traits::input_parameter< int >::type minLen(minLenSEXP);
-    Rcpp::traits::input_parameter< int >::type maxLen(maxLenSEXP);
     Rcpp::traits::input_parameter< int >::type maxMismcNum(maxMismcNumSEXP);
-    Rcpp::traits::input_parameter< int >::type maxLoopLen(maxLoopLenSEXP);
-    rcpp_result_gen = Rcpp::wrap(detectImperfectIR_cpp(enc1, enc2, minLen, maxLen, maxMismcNum, maxLoopLen));
+    rcpp_result_gen = Rcpp::wrap(detectImperfectIR_cpp(enc1, enc2, minLen, maxMismcNum));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detectImperfectIRWithLoop_cpp
+List detectImperfectIRWithLoop_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, int maxMismcNum, int loopLength);
+RcppExport SEXP detectIR_detectImperfectIRWithLoop_cpp(SEXP enc1SEXP, SEXP enc2SEXP, SEXP minLenSEXP, SEXP maxMismcNumSEXP, SEXP loopLengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type enc1(enc1SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type enc2(enc2SEXP);
+    Rcpp::traits::input_parameter< int >::type minLen(minLenSEXP);
+    Rcpp::traits::input_parameter< int >::type maxMismcNum(maxMismcNumSEXP);
+    Rcpp::traits::input_parameter< int >::type loopLength(loopLengthSEXP);
+    rcpp_result_gen = Rcpp::wrap(detectImperfectIRWithLoop_cpp(enc1, enc2, minLen, maxMismcNum, loopLength));
     return rcpp_result_gen;
 END_RCPP
 }
