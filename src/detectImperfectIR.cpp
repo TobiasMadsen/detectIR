@@ -53,7 +53,7 @@ struct Candidate {
     start(start_), end(end_), mismcNum(mismcNum_), firstMatch(firstMatch_), lastMatch(lastMatch_) {}
 };
 
-void addCandidates(int stemLen, int maxMismcNum, int loopLen, std::vector<Enc> & cumScore, std::vector<Enc> & nseq, std::vector<Candidate> & candidates){
+void addCandidates(int stemLen, int maxMismcNum, int loopLen, std::vector<Enc> & cumScore, std::vector<Enc> & nseq, std::vector<Candidate> & candidates, bool verbose = false){
   int N = nseq.size();
 
   // Add candidate IR with distance len
@@ -73,7 +73,8 @@ void addCandidates(int stemLen, int maxMismcNum, int loopLen, std::vector<Enc> &
 	}
       }
       if(misMatchNum <= maxMismcNum){
-	// printf("Adding candidate with loop: From: %i To: %i FirstMatch: %i LastMatch: %i\n", i, i+2*stemLen+loopLen-1, firstMatch, lastMatch);
+	if (verbose)
+	  printf("Adding candidate with loop: From: %i To: %i FirstMatch: %i LastMatch: %i\n", i, i+2*stemLen+loopLen-1, firstMatch, lastMatch);
 	candidates.push_back(Candidate(i, i+2*stemLen+loopLen-1, misMatchNum, firstMatch, lastMatch));
       }
     }
@@ -82,7 +83,7 @@ void addCandidates(int stemLen, int maxMismcNum, int loopLen, std::vector<Enc> &
 
 
 // [[Rcpp::export]]
-List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, int maxMismcNum) {
+List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minStemLen, int maxMismcNum, bool verbose = false) {
   // Perform checks on input
 
   // Useful variables
@@ -108,10 +109,10 @@ List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, i
   std::vector<Candidate> candidates;
   
   // 3.1 Possible IRs' cumulative score
-  // Candidates with distance minLen
-  addCandidates(minLen/2, maxMismcNum, 0, cumScore, nseq, candidates);
-  // Candidates with distance minLen+1
-  addCandidates(minLen/2, maxMismcNum, 1, cumScore, nseq, candidates);
+  // Candidates with even length 
+  addCandidates(minStemLen, maxMismcNum, 0, cumScore, nseq, candidates, verbose);
+  // Candidates with odd length
+  addCandidates(minStemLen, maxMismcNum, 1, cumScore, nseq, candidates, verbose);
 
   // 4. Grow candidates
   for(std::vector<Candidate>::iterator it = candidates.begin(); it != candidates.end(); ++it){
@@ -134,7 +135,7 @@ List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, i
   
   // 5. Report full-grown candidates
   for(std::vector<Candidate>::iterator it = candidates.begin(); it != candidates.end(); ++it){
-    if(it->lastMatch - it->firstMatch + 1 >= minLen){
+    if(it->lastMatch - it->firstMatch + 1 >= 2*minStemLen){
       startPos.push_back( it->firstMatch + 1); // Add one for 1-indexing in R
       endPos.push_back( it->lastMatch + 1);
     }
@@ -148,7 +149,7 @@ List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, i
 }
 
 // [[Rcpp::export]]
-List detectImperfectIRWithLoop_cpp(IntegerVector enc1, IntegerVector enc2, int minLen, int maxMismcNum, int loopLength) {
+List detectImperfectIRWithLoop_cpp(IntegerVector enc1, IntegerVector enc2, int minStemLen, int maxMismcNum, int loopLength, bool verbose = false) {
   // Perform checks on input
 
   // Useful variables
@@ -175,7 +176,7 @@ List detectImperfectIRWithLoop_cpp(IntegerVector enc1, IntegerVector enc2, int m
   
   // 3.1 Possible IRs' cumulative score
   // Candidates with distance minLen
-  addCandidates(minLen, maxMismcNum, loopLength, cumScore, nseq, candidates);
+  addCandidates(minStemLen, maxMismcNum, loopLength, cumScore, nseq, candidates, verbose);
 
   // 4. Grow candidates
   for(std::vector<Candidate>::iterator it = candidates.begin(); it != candidates.end(); ++it){
@@ -198,7 +199,7 @@ List detectImperfectIRWithLoop_cpp(IntegerVector enc1, IntegerVector enc2, int m
   
   // 5. Report full-grown candidates
   for(std::vector<Candidate>::iterator it = candidates.begin(); it != candidates.end(); ++it){
-    if(it->lastMatch - it->firstMatch + 1 >= minLen){
+    if(it->lastMatch - it->firstMatch + 1 >= 2*minStemLen+loopLength){
       startPos.push_back( it->firstMatch + 1); // Add one for 1-indexing in R
       endPos.push_back( it->lastMatch + 1);
     }
