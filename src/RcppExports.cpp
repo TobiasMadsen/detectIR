@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// annotateMotif_cpp
+IntegerVector annotateMotif_cpp(IntegerVector enc1, IntegerVector enc2, IntegerVector start, IntegerVector end);
+RcppExport SEXP detectIR_annotateMotif_cpp(SEXP enc1SEXP, SEXP enc2SEXP, SEXP startSEXP, SEXP endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type enc1(enc1SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type enc2(enc2SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type start(startSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type end(endSEXP);
+    rcpp_result_gen = Rcpp::wrap(annotateMotif_cpp(enc1, enc2, start, end));
+    return rcpp_result_gen;
+END_RCPP
+}
 // detectImperfectIR_cpp
 List detectImperfectIR_cpp(IntegerVector enc1, IntegerVector enc2, int minStemLen, int maxMismcNum, bool verbose);
 RcppExport SEXP detectIR_detectImperfectIR_cpp(SEXP enc1SEXP, SEXP enc2SEXP, SEXP minStemLenSEXP, SEXP maxMismcNumSEXP, SEXP verboseSEXP) {
